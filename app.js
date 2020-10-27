@@ -13,48 +13,124 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
+function addManager(){
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter your manager's name:",
+            name: "managerName"
+        },
+        {
+            type: "input",
+            message: "Enter your manager's ID:",
+            name: "managerId"
+        },
+        {
+            type: "input",
+            message: "Enter your manager's email address:",
+            name: "managerEmail"
+        },
+        {
+            type: "input",
+            message: "Enter your manager's office number:",
+            name: "managerOffice"
+        }
+    ]).then(answers => {
+        const { managerName, managerId, managerEmail, managerOffice } = answers;
 
-inquirer.prompt([
-    {
-        type: "input",
-        message: "Enter your first and last name:",
-        name: "name"
-    },
-    {
-        type: "input",
-        message: "Enter your employee ID:",
-        name: "id"
-    },
-    {
-        type: "input",
-        message: "Enter your email address:",
-        name: "email"
-    },
-    {
-        type: "list",
-        name: "role",
-        message: "Choose your role:",
-        choices: ["Intern", "Engineer", "Manager"]
-    },
-    {
-        type: "input",
-        message: "Enter your school:",
-        name: "school",
-        when: (answer) => answer.role === "Intern"
-    },
-    {
-        type: "input",
-        message: "Enter your GitHub username:",
-        name: "github",
-        when: (answer) => answer.role === "Engineer"
-    },
-    {
-        type: "input",
-        message: "Enter your office number:",
-        name: "officeNum",
-        when: (answer) => answer.role === "Manager"
-    }
-])
+        const manager = new Manager(managerName, managerId, managerEmail, managerOffice);
+
+        createTeam();
+    });
+}
+
+
+function createTeam(){
+    inquirer.prompt([
+        {
+            type:"list",
+            message: "Add a new team member:",
+            name: "newMember",
+            choices: ["Intern", "Engineer", "I do not want to add a new team member"]
+        }
+    ]).then(answer => {
+        if(answer.newMember === "Intern"){
+            addIntern();
+        }
+        else if(answer.newMember === "Engineer"){
+            addEngineer();
+        }
+        else {
+            return;
+        }
+    })
+}
+
+
+function addIntern(){
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter your intern's name:",
+            name: "internName"
+        },
+        {
+            type: "input",
+            message: "Enter your intern's ID:",
+            name: "internId"
+        },
+        {
+            type: "input",
+            message: "Enter your intern's email address:",
+            name: "internEmail"
+        },
+        {
+            type: "input",
+            message: "Enter your intern's school name:",
+            name: "internSchool"
+        }
+    ]).then(answers => {
+        const { internName, internId, internEmail, internSchool } = answers;
+
+        const intern = new Intern(internName, internId, internEmail, internSchool);
+
+        createTeam();
+    });
+}
+
+
+function addEngineer(){
+    inquirer.prompt([
+        {
+            type: "input",
+            message: "Enter your engineer's name:",
+            name: "engineerName"
+        },
+        {
+            type: "input",
+            message: "Enter your engineer's ID:",
+            name: "engineerId"
+        },
+        {
+            type: "input",
+            message: "Enter your engineer's email address:",
+            name: "engineerEmail"
+        },
+        {
+            type: "input",
+            message: "Enter your engineer's GitHub username:",
+            name: "engineerGithub"
+        }
+    ]).then(answers => {
+        const { engineerName, engineerId, engineerEmail, engineerGithub } = answers;
+
+        const engineer = new Engineer(engineerName, engineerId, engineerEmail, engineerGithub);
+
+        createTeam();
+    });
+}
+
+addManager();
 
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
