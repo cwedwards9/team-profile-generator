@@ -10,9 +10,10 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+const teamMembers = [];
 
-// Write code to use inquirer to gather information about the development team members,
-// and to create objects for each team member (using the correct classes as blueprints!)
+
+// Add prompts to get information about the manager
 function addManager(){
     inquirer.prompt([
         {
@@ -36,15 +37,18 @@ function addManager(){
             name: "managerOffice"
         }
     ]).then(answers => {
+        // Get the data from the user's input
         const { managerName, managerId, managerEmail, managerOffice } = answers;
 
+        // Create a new Manager instance and add it to the teamMembers array
         const manager = new Manager(managerName, managerId, managerEmail, managerOffice);
+        teamMembers.push(manager);
 
         createTeam();
     });
 }
 
-
+// Add a prompt to see if the user needs to add a new intern/engineer object or if they are done
 function createTeam(){
     inquirer.prompt([
         {
@@ -61,12 +65,12 @@ function createTeam(){
             addEngineer();
         }
         else {
-            return;
+            renderTeam();
         }
     })
 }
 
-
+// Add prompts to get information about the intern
 function addIntern(){
     inquirer.prompt([
         {
@@ -93,12 +97,13 @@ function addIntern(){
         const { internName, internId, internEmail, internSchool } = answers;
 
         const intern = new Intern(internName, internId, internEmail, internSchool);
+        teamMembers.push(intern);
 
         createTeam();
     });
 }
 
-
+// Add prompts to get information about the engineer
 function addEngineer(){
     inquirer.prompt([
         {
@@ -125,10 +130,19 @@ function addEngineer(){
         const { engineerName, engineerId, engineerEmail, engineerGithub } = answers;
 
         const engineer = new Engineer(engineerName, engineerId, engineerEmail, engineerGithub);
+        teamMembers.push(engineer);
 
         createTeam();
     });
 }
+
+function renderTeam() {
+    fs.appendFile(outputPath, render(teamMembers), (err) =>{
+        if(err) throw err;
+        console.log("You created your team successfully!");
+    });
+}
+
 
 addManager();
 
@@ -142,12 +156,4 @@ addManager();
 // Hint: you may need to check if the `output` folder exists and create it if it
 // does not.
 
-// HINT: each employee type (manager, engineer, or intern) has slightly different
-// information; write your code to ask different questions via inquirer depending on
-// employee type.
 
-// HINT: make sure to build out your classes first! Remember that your Manager, Engineer,
-// and Intern classes should all extend from a class named Employee; see the directions
-// for further information. Be sure to test out each class and verify it generates an
-// object with the correct structure and methods. This structure will be crucial in order
-// for the provided `render` function to work! ```
