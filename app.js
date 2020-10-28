@@ -19,22 +19,26 @@ function addManager(){
         {
             type: "input",
             message: "Enter your manager's name:",
-            name: "managerName"
+            name: "managerName",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your manager's ID:",
-            name: "managerId"
+            name: "managerId",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your manager's email address:",
-            name: "managerEmail"
+            name: "managerEmail",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your manager's office number:",
-            name: "managerOffice"
+            name: "managerOffice",
+            validate: validateInput
         }
     ]).then(answers => {
         // Get the data from the user's input
@@ -76,22 +80,26 @@ function addIntern(){
         {
             type: "input",
             message: "Enter your intern's name:",
-            name: "internName"
+            name: "internName",
+            validate: validateInput
         },
         {
-            type: "input",
+            type: "number",
             message: "Enter your intern's ID:",
-            name: "internId"
+            name: "internId",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your intern's email address:",
-            name: "internEmail"
+            name: "internEmail",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your intern's school name:",
-            name: "internSchool"
+            name: "internSchool",
+            validate: validateInput
         }
     ]).then(answers => {
         const { internName, internId, internEmail, internSchool } = answers;
@@ -109,22 +117,26 @@ function addEngineer(){
         {
             type: "input",
             message: "Enter your engineer's name:",
-            name: "engineerName"
+            name: "engineerName",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your engineer's ID:",
-            name: "engineerId"
+            name: "engineerId",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your engineer's email address:",
-            name: "engineerEmail"
+            name: "engineerEmail",
+            validate: validateInput
         },
         {
             type: "input",
             message: "Enter your engineer's GitHub username:",
-            name: "engineerGithub"
+            name: "engineerGithub",
+            validate: validateInput
         }
     ]).then(answers => {
         const { engineerName, engineerId, engineerEmail, engineerGithub } = answers;
@@ -136,6 +148,7 @@ function addEngineer(){
     });
 }
 
+// Write to a file (new or existing) called team.html in the output directory with the user's inputs rendered into html
 function renderTeam() {
     fs.writeFileSync(outputPath, render(teamMembers), (err) =>{
         if(err) throw err;
@@ -143,5 +156,13 @@ function renderTeam() {
     });
 }
 
-
+// Initialize the application, start with getting info on the manager
 addManager();
+
+// Validation
+function validateInput(input){
+    if(!input){
+        return "Please enter an input!"
+    }
+    return true;
+}
