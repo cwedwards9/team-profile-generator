@@ -61,7 +61,7 @@ function init(){
                 type:"list",
                 message: "Add a new team member:",
                 name: "newMember",
-                choices: ["Intern", "Engineer", "I do not want to add a new team member"]
+                choices: ["Engineer", "Intern", "Finish and create team!"]
             }
         ]).then(answer => {
             if(answer.newMember === "Intern"){
@@ -154,16 +154,15 @@ function init(){
 }
 
 
-// Initialize the application, start with getting info on the manager
+// Initialize the application to prompt the user
 init();
 
 
 // Write to a file (new or existing) called team.html in the output directory with the user's inputs rendered into html
 function renderTeam() {
-    fs.writeFileSync(outputPath, render(teamMembers), (err) =>{
-        if(err) throw err;
-        console.log("You created your team successfully!");
-    });
+    fs.writeFileSync(outputPath, render(teamMembers), "utf8");
+    console.log("You created your team successfully!");
+    console.log(teamMembers);
 }
 
 
